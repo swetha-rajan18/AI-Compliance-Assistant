@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What is the purpose of the NIST AI Risk Management Framework?",
+    "expected_documents": ["nist_ai_rmf_1.0.pdf"]
+  },
+  {
+    "question": "What are the four core functions of the NIST AI Risk Management Framework?",
+    "expected_documents": ["nist_ai_rmf_1.0.pdf"]
+  },
+  {
+    "question": "What is the purpose of the NIST Generative AI Profile?",
+    "expected_documents": ["nist_generative_ai_profile.pdf"]
+  },
+  {
+    "question": "What does the NIST AI RMF Playbook provide?",
+    "expected_documents": ["nist_ai_rmf_playbook.pdf"]
+  },
+  {
+    "question": "What requirements apply to high-risk AI systems under the EU AI Act?",
+    "expected_documents": ["eu_ai_act.pdf"]
+  },
+  {
+    "question": "What AI practices are prohibited under the EU AI Act?",
+    "expected_documents": ["eu_ai_act.pdf"]
+  },
+  {
+    "question": "What does the EU AI Act say about risk management for high-risk AI systems?",
+    "expected_documents": ["eu_ai_act.pdf"]
+  },
+  {
+    "question": "What is the current price of Bitcoin?",
+    "expected_documents": []
+  },
+  {
+    "question": "What is the weather in Bangalore today?",
+    "expected_documents": []
+  },
+  {
+    "question": "Who won the most recent IPL season?",
+    "expected_documents": []
+  }
+]
