@@ -238,50 +238,48 @@ SOURCES USED:
         return citations
 
 
-    def answer(
-        self,
-        question: str,
-        top_k: int = 5,
-    ) -> dict:
-        
-        # -----------------------------------------
-        # 1. Prompt injection guardrail
-        # -----------------------------------------
-    
+    def answer(self, question: str, top_k: int = 5) -> dict:
         if detect_prompt_injection(question):
             return {
                 "question": question,
                 "answer": (
-                    "I can't follow instructions that attempt to "
-                    "override the assistant's safety or grounding rules."
+                    "I cannot follow instructions that attempt to override "
+                    "the assistant's safety or system instructions."
                 ),
                 "citations": [],
                 "grounded": False,
                 "abstained": True,
+                "best_distance": None,
                 "prompt_injection_detected": True,
             }
-
-        # -----------------------------------------
-        # 2. Retrieve relevant policy chunks
-        # -----------------------------------------
 
         retrieved_chunks = self.retriever.search(
             question,
             top_k=top_k,
         )
 
-        best_distance = retrieved_chunks[0]["distance"]
+        if not retrieved_chunks:
+            return {
+                "question": question,
+                "answer": (
+                    "The provided sources do not contain enough information "
+                    "to answer this question."
+                ),
+                "citations": [],
+                "grounded": False,
+                "abstained": True,
+                "best_distance": None,
+                "prompt_injection_detected": False,
+            }
 
-        # -----------------------------------------
-        # 3. Abstain if evidence is insufficient
-        # -----------------------------------------
+        best_distance = retrieved_chunks[0]["distance"]
 
         if best_distance > ABSTENTION_THRESHOLD:
             return {
                 "question": question,
                 "answer": (
-                    "The provided sources do not contain enough "
-                    "information to answer this question."
+                    "The provided sources do not contain enough information "
+                    "to answer this question."
                 ),
                 "citations": [],
                 "grounded": False,
@@ -289,10 +287,6 @@ SOURCES USED:
                 "best_distance": best_distance,
                 "prompt_injection_detected": False,
             }
-
-        # -----------------------------------------
-        # 4. Build grounded prompt
-        # -----------------------------------------
 
         prompt = self.build_prompt(
             question,
@@ -306,10 +300,6 @@ SOURCES USED:
             }
         ]
 
-        # -----------------------------------------
-        # 5. Generate answer
-        # -----------------------------------------
-
         result = self.generator(
             messages,
             max_new_tokens=400,
@@ -318,18 +308,16 @@ SOURCES USED:
         )
 
         generated_messages = result[0]["generated_text"]
-        
         generated_text = generated_messages[-1]["content"]
-        
+
         answer, source_numbers = self.parse_generated_response(
             generated_text
         )
 
-        answer = answer.strip()
-
-        if answer.endswith("**"):
-            answer = answer[:-2].rstrip()
-
+        # Fallback: if the model does not return source numbers,
+        # cite the highest-ranked retrieved source.
+        if not source_numbers and retrieved_chunks:
+            source_numbers = [1]
 
         citations = self.create_citations(
             retrieved_chunks,
