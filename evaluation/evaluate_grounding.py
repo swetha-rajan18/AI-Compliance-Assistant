@@ -84,7 +84,7 @@ def main():
     questions = [
         "What is the purpose of the NIST AI Risk Management Framework?",
         "What are the four core functions of the NIST AI Risk Management Framework?",
-        "What does the EU AI Act say about risk management for high-risk AI systems?",
+        "What does the EU AI Act require regarding post-market monitoring for certain high-risk AI systems?",
     ]
 
     for question in questions:

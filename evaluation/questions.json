@@ -24,7 +24,7 @@
     "expected_documents": ["eu_ai_act.pdf"]
   },
   {
-    "question": "What does the EU AI Act say about risk management for high-risk AI systems?",
+    "question": "What does the EU AI Act require regarding post-market monitoring for certain high-risk AI systems?",
     "expected_documents": ["eu_ai_act.pdf"]
   },
   {
