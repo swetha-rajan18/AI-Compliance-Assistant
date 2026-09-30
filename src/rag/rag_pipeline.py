@@ -12,7 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.retrieval.retriever import Retriever
 
 
-MODEL_NAME = "Qwen/Qwen2.5-1.5B-Instruct"
+MODEL_NAME = "Qwen/Qwen2.5-0.5B-Instruct"
 
 ABSTENTION_THRESHOLD = 1.0
 
@@ -55,6 +55,7 @@ class RAGPipeline:
             "text-generation",
             model=MODEL_NAME,
             tokenizer=MODEL_NAME,
+            device="cpu",
         )
 
     def build_prompt(
